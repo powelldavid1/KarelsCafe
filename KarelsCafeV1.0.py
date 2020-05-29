@@ -4,12 +4,11 @@ This is my final project for CS106A Code in Place.
 Karel's Cafe
 Karel will make a drink from a menu, the ingredients will mix around for a bit before becoming more stable.
 
-
-
 Special thanks to our instructors Chris Piech, Mehran Sahami, my section leader, Jacob
 Lehenbauer and the wonderful community that we were able to create on Ed.
 
-Note: This is the Tea Room.
+Video: https://youtu.be/3lFb8SjJqOA
+Note: This is not the Tea Room.
 """
 import tkinter
 import random
@@ -18,7 +17,7 @@ import time
 from PIL import ImageTk
 from PIL import Image
 
-CANVAS_WIDTH = 800
+CANVAS_WIDTH = 700
 CANVAS_HEIGHT = 600
 BORDER = 5
 
@@ -36,10 +35,16 @@ MATCHA = 'lawn green'
 MOTOR_OIL = 'black'
 
 #table location
-X_START = 300
+X_START = 250
 Y_START = 300
 X_END = 600
 Y_END = CANVAS_HEIGHT - BORDER
+
+#special board location
+X_SPECIAL_START = CANVAS_WIDTH * 0.5 - 65
+Y_SPECIAL_START = BORDER
+X_SPECIAL_END = CANVAS_WIDTH - 20
+Y_SPECIAL_END = CANVAS_HEIGHT * 0.25
 
 # Standard cups
 CUP_THICKNESS = 10
@@ -61,7 +66,6 @@ ROWS_DRINK = CUP_DEPTH // INGREDIENT_SQUARE
 
 def main():
     #make the interface
-    # make canvas
     canvas = make_canvas(CANVAS_WIDTH, CANVAS_HEIGHT, "Karel's Cafe")
     # putting in two rectangles to make a border
     canvas.create_rectangle(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT, fill='black')
@@ -81,7 +85,6 @@ def main():
         canvas.update()
         time.sleep(1/50)
 
-
     #this dictionary is a recipe book with the ingredients in their approximate ratios
     recipe_bk = {}
     recipe_bk['unicorn'] = [MAGIC_DUST, EVERY_THING_NICE, HOT_WATER, CREAM_WHIPPED, CREAM_WHIPPED]
@@ -96,11 +99,11 @@ def main():
     recipe_bk['roboccino'] = [MOTOR_OIL, MOTOR_OIL, MOTOR_OIL, ESPRESSO, CREAM_WHIPPED]
 
     # the menu
-    canvas.create_rectangle(CANVAS_WIDTH * 0.5, BORDER, CANVAS_WIDTH - 20, CANVAS_HEIGHT * 0.25)
-    canvas.create_text(CANVAS_WIDTH * 0.5 + 15, BORDER + 10, text="Today's Special", anchor='nw',font=('fixedsys', 32, 'italic'))
+    canvas.create_rectangle(X_SPECIAL_START, Y_SPECIAL_START, X_SPECIAL_END, Y_SPECIAL_END)
+    canvas.create_text(X_SPECIAL_START + 15, Y_SPECIAL_START + 10, text="Today's Special", anchor='nw',font=('fixedsys', 32, 'italic'))
     menu_items = list(recipe_bk.keys())
     drink_special = menu_items[random.randint(0, len(menu_items))]
-    canvas.create_text(CANVAS_WIDTH * 0.5 + 75, BORDER + 100, text=drink_special, anchor='nw', font=('courier', 24, 'bold'))
+    canvas.create_text(X_SPECIAL_START + 75, Y_SPECIAL_START + 80, text=drink_special, anchor='nw', font=('courier', 24, 'bold'))
     print("Welcome to my cafe, here is the menu:")
     for item in range(len(menu_items)):
         print(menu_items[item])
@@ -133,8 +136,8 @@ def get_top_y(canvas, object):
 def make_drink(x, y, recipe, canvas):
     drink_x = x + CUP_THICKNESS + 1
     drink_y = y + CUP_THICKNESS
-    #drink = canvas.create_rectangle(drink_x, drink_y, drink_x + CUP_INNER_DIAMETER - CUP_THICKNESS, drink_y + CUP_DEPTH)
-    display_time = 200
+
+    display_time = 150
 
     while display_time > 0:
         for row in range(ROWS_DRINK):
